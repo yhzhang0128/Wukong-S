@@ -1,0 +1,15 @@
+REGISTER QUERY query5_photo_friend_like AS
+
+SELECT ?friend1 ?friend2 ?photo
+FROM photostream
+[ RANGE 1s STEP 100ms ]
+FROM photolikestream
+[ RANGE 1s STEP 100ms ]
+
+WHERE
+{
+  ?photo sib:usertag sib:usertag <-S
+  ?photo sib:usertag ?friend1 ->S
+  ?friend1 foaf:knows ?friend2 ->T
+  ?friend2 sib:like ?photo <-S
+}
