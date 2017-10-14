@@ -781,22 +781,3 @@ void server::run(){
         }
     }
 }
-
-//
-//
-// void server::run(){
-//     while(true){
-//         request_or_reply r=RecvR(cfg);
-//         if(r.is_request()){
-//             r.id=cfg->get_inc_id();
-//             execute(r);
-//         } else {
-//             //r is reply
-//             wqueue.put_reply(r);
-//             if(wqueue.is_ready(r.parent_id)){
-//                 request_or_reply reply=wqueue.get_merged_reply(r.parent_id);
-//                 SendR(cfg,cfg->mid_of(reply.parent_id),cfg->tid_of(reply.parent_id),reply);
-//             }
-//         }
-//     }
-// }

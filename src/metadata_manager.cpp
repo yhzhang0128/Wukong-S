@@ -338,48 +338,9 @@ void metadataManager::update_metadata(
     }
 }
 
-// query and garbage collection
-// void metadataManager::prepare_metadata_cache(
-//     const request_or_reply& r,
-//     metadata_cache_packet* cache_packet){
-    
-//     int nwindows = r.stream_info.window_info.size();
-//     // prepare metadata for each window (on different stream)
-//     for(int i = 0; i < nwindows; i++){
-//         int start_batch_id = r.stream_info.window_info[i].start_batch_id;
-//         int end_batch_id = r.stream_info.window_info[i].end_batch_id;
-//         int stream_id = r.stream_info.window_info[i].stream_id;
-
-//         for(int bid = start_batch_id; bid <= end_batch_id; bid++){
-//             // ring buffer
-//             int bid_mod = bid % batch_num_reserved;
-
-//             // TODO: query filter
-//             cache_packet->append(stream_metadata[stream_id][bid_mod].records);
-//         }
-//     }
-// }
 
 
 void metadataManager::print_memory_usage(){
+    // @deprecated
     assert(false);
-    
-//     int nstream = global_stream_source_num;
-//     for(int i = 0; i < nstream; i++){
-//         pthread_spin_lock(&stream_lock[i]);
-//         cout << "#######Stream" << i << endl;
-
-//         int total_interval = 0, total_data = 0;
-//         int nrecord = usage[i].size();
-//         for(auto iter : usage[i]){
-//             total_interval += iter.ninterval;
-//             total_data += iter.ndata;
-// //            if (iter.ninterval != 0)
-// //            cout << iter.ninterval << "\t" << iter.ndata << endl;
-//         }
-//         cout << "metadata: " << total_interval / nrecord;
-//         cout << "data: " << total_data / nrecord;
-//         cout << endl;
-//         pthread_spin_unlock(&stream_lock[i]);
-//     }
 }

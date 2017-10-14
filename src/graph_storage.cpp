@@ -356,106 +356,12 @@ void graph_storage::atomic_batch_insert(vector<edge_triple>& vec_spo,vector<edge
     	start=end;
 	}
 
-    /* @depricated
-    // (o, <-, 0) ---> predicts
-    start=nedges_to_skip;
-    while(start<vec_ops.size()){
-        uint64_t end = start, npredict = 0;
-        while(end<vec_ops.size() && vec_ops[start].o==vec_ops[end].o){
-            if(end==start || vec_ops[end].p!=vec_ops[end-1].p){
-                npredict++;
-            }
-            end++;
-        }
-
-        if (vec_ops[start].o < (1 << nbit_predict))
-            assert(false);
-
-        // insert local_key+local_val into hash table
-        local_key key= local_key(vec_ops[start].o,direction_in,0);
-        uint64_t vertex_ptr=insertKey(key);
-        init_mem_for_key(vertex_ptr, npredict);
-        curr_edge_ptr = vertex_addr[vertex_ptr].val.get_writearea().start_ptr;
-        //curr_edge_ptr = edge_manager->alloc(npredict);
-        //local_val val= local_val(npredict, curr_edge_ptr);
-        //vertex_addr[vertex_ptr].val=val;
-        
-        // insert edges into edge memory
-		for(int idx = start; idx < end; idx++){
-            if(idx==start || vec_ops[idx].p!=vec_ops[idx-1].p){
-                edge_addr[curr_edge_ptr].val = vec_ops[idx].p;
-    			curr_edge_ptr++;
-            }
-		}
-        start=end;
-	}
-    */
 }
 void graph_storage::print_memory_usage(){
 
     cout << "slot used: " << slot_used << endl;
     cout << "slot size: " << sizeof(vertex) << endl;
     cout << "edge memory used: " << malloc_mem_used << endl;
-	// cout<<"graph_storage use "<<used_indirect_num <<" / "
-	// 	<<indirect_num 	<<" indirect_num"<<endl;
-	// cout<<"graph_storage use "<<slot_num*sizeof(vertex) / 1048576<<" MB for vertex data"<<endl;
-    // edge_manager->print_memory_usage();
-
-    //cout<<"disable print_memory_usage now "<<endl;
-    //return ;
-    
-    /*
-    uint64_t used_header_slot=0;
-    for(int x=0;x<header_num+indirect_num;x++){
-		for(int y=0;y<cluster_size-1;y++){
-			uint64_t i=x*cluster_size+y;
-			if(vertex_addr[i].key==local_key()){
-				//empty slot, skip it
-				continue;
-			}
-            used_header_slot++;
-        }
-    }
-    cout<<"graph_storage direct_header= "<<header_num*cluster_size*sizeof(vertex) / 1048576<<" MB "<<endl;
-    cout<<"                  real_data= "<<used_header_slot*sizeof(vertex) / 1048576<<" MB "<<endl;
-    cout<<"                   next_ptr= "<<header_num*sizeof(vertex) / 1048576<<" MB "<<endl;
-    cout<<"                 empty_slot= "<<(header_num*cluster_size-header_num-used_header_slot)
-                                                            *sizeof(vertex) / 1048576<<" MB "<<endl;
-
-    uint64_t used_indirect_slot=0;
-    uint64_t used_indirect_bucket=0;
-    for(int x=header_num;x<header_num+indirect_num;x++){
-        bool all_empty=true;
-		for(int y=0;y<cluster_size-1;y++){
-			uint64_t i=x*cluster_size+y;
-			if(vertex_addr[i].key==local_key()){
-				//empty slot, skip it
-				continue;
-			}
-            all_empty=false;
-            used_indirect_slot++;
-        }
-        if(!all_empty){
-            used_indirect_bucket++;
-        }
-    }
-    cout<<"graph_storage indirect_header= "<<indirect_num*cluster_size*sizeof(vertex) / 1048576<<" MB "<<endl;
-    cout<<"               not_empty_data= "<<used_indirect_bucket*cluster_size*sizeof(vertex) / 1048576<<" MB "<<endl;
-    cout<<"                    real_data= "<<used_indirect_slot*sizeof(vertex) / 1048576<<" MB "<<endl;
-
-
-    cout<<"graph_storage use "<<used_indirect_num <<" / " <<indirect_num 	<<" indirect_num"<<endl;
-    cout<<"graph_storage use "<<slot_num*sizeof(vertex) / 1048576<<" MB for vertex data"<<endl;
-
-	cout<<"graph_storage edge_data= "<<new_edge_ptr*sizeof(edge)/1048576<<"/"
-							<<max_edge_ptr*sizeof(edge)/1048576<<" MB "<<endl;
-    cout<<"         for type_index= "<<type_index_edge_num*sizeof(edge)/1048576<<"/"
-                        	<<max_edge_ptr*sizeof(edge)/1048576<<" MB "<<endl;
-    cout<<"      for predict_index= "<<predict_index_edge_num*sizeof(edge)/1048576<<"/"
-                        	<<max_edge_ptr*sizeof(edge)/1048576<<" MB "<<endl;
-    cout<<"      for normal_vertex= "<<(new_edge_ptr-predict_index_edge_num-type_index_edge_num)*sizeof(edge)/1048576<<"/"
-                        	<<max_edge_ptr*sizeof(edge)/1048576<<" MB "<<endl;
-    */
 
 }
 
@@ -606,20 +512,7 @@ void graph_storage::init_index_table(){
 
 
     uint64_t t2=timer::get_usec();
-    /*
-    for( tbb_vector_table::iterator i=type_table.begin(); i!=type_table.end(); ++i ) {
-        uint64_t curr_edge_ptr=atomic_alloc_edges(i->second.size());
-        local_key key= local_key(i->first,direction_in,0);
-		uint64_t vertex_ptr=insertKey(key);
-		local_val val= local_val(i->second.size(),curr_edge_ptr);
-		vertex_addr[vertex_ptr].val=val;
-		for(uint64_t k=0;k<i->second.size();k++){
-			edge_addr[curr_edge_ptr].val=i->second[k];
-			curr_edge_ptr++;
-            type_index_edge_num++;
-		}
-    }
-    */
+
 
     // (p, <-, 0) ---> normal vertex
     // use src_predict_table
@@ -672,87 +565,3 @@ edge* graph_storage::get_index_edges_local(int tid,uint64_t index_id,int directi
     //predict is not important , so we set it 0
     return get_edges_local(tid,index_id,direction,0,size);
 };
-
-// edge* graph_storage::get_index_edges_global(
-//     int tid,uint64_t index_id,int direction,int* size){
-//     int predict = 0;
-
-//     *size = 0;
-//     char *local_buffer = rdma->GetMsgAddr(tid);
-
-//     // reserve some registered rdma memory for get_index_vertex_remote
-//     edge* result_ptr = (edge*)local_buffer;
-//     result_ptr += (sizeof(vertex) * cluster_size / sizeof(edge)) + 1;
-
-//     edge* next_machine_ptr = result_ptr;
-//     // get index edges from all machine
-//     for(int i = 0; i < m_num; i++){
-//         local_key key=local_key(index_id, direction, predict);
-
-//         vertex v;
-//         if (i == m_id)
-//             v = get_vertex_local(key);
-//         else
-//             v = get_index_vertex_remote(tid, key, i);
-
-//         // no data for this index on machine i
-//         if(v.key==local_key())
-//             continue;
-
-//         // read to buffer
-//         edge_memarea area = v.val.get_readarea();
-//         *size += area.offset;
-
-//         if (i == m_id){
-//             uint64_t ptr = area.start_ptr;
-//             memcpy(next_machine_ptr, &(edge_addr[ptr]), sizeof(edge) * area.offset);
-//         } else{
-//             uint64_t start_addr  = sizeof(vertex)*slot_num + sizeof(edge)*(area.start_ptr);
-//             uint64_t read_length = sizeof(edge)*area.offset;
-//             rdma->RdmaRead(tid, i, (char *)next_machine_ptr,
-//                            read_length, start_addr);
-//         }
-//         next_machine_ptr += area.offset;
-//     }
-
-//     //cout << "index total " << *size << endl;
-//     if ((*size) == 0)
-//         return NULL;
-//     else
-//         return result_ptr;
-// }
-
-// vertex graph_storage::get_index_vertex_remote(
-//     int tid, local_key key, int mid){
-//     // can not use local buffer here!
-//     // @depricated because get_index_edges_global is using it 
-//     char *local_buffer = rdma->GetMsgAddr(tid);
-//     uint64_t bucket_id = key.hash() % header_num;
-
-//     while(true){
-//         uint64_t start_addr=sizeof(vertex) * bucket_id *cluster_size;
-//         uint64_t read_length=sizeof(vertex) * cluster_size;
-//         rdma->RdmaRead(tid, mid, (char *)local_buffer,
-//                        read_length, start_addr);
-//         vertex* ptr= (vertex*)local_buffer;
-        
-//         for(uint64_t i=0; i<cluster_size; i++){
-//             if(i<cluster_size-1){
-//                 if(ptr[i].key==key){
-//                     //we found it
-//                     rdmacache.insert(ptr[i]);
-//                     return ptr[i];
-//                 }
-//             } else {
-//                 if(ptr[i].key!=local_key()){
-//                     //next pointer
-//                     bucket_id=ptr[i].key.id;
-//                     //break from for loop, will go to next bucket
-//                     break;
-//                 } else {
-//                     return vertex();
-//                 }
-//             }
-//         }
-//     }
-// }

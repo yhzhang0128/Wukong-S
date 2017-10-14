@@ -35,10 +35,6 @@ bool TryRecvC(thread_cfg* cfg, int r_mid, stream_vector_clock& clock);
 void SendM(thread_cfg* cfg, int r_mid, int r_tid, metadata_cache_packet &packet);
 bool TryRecvM(thread_cfg* cfg, int r_mid, metadata_cache_packet &packet);
 
-// optimized metadata packet
-/* void SendMOpt(thread_cfg* cfg, int r_mid, int r_tid, forward_star_packet &packet); */
-/* void RecvMOpt(thread_cfg* cfg, int r_mid, forward_star_packet &packet); */
-
 template<typename T>
 void SendObject(thread_cfg* cfg,int r_mid,int r_tid,T& r){
     std::stringstream ss;

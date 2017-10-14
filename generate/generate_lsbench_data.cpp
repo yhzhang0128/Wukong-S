@@ -15,33 +15,6 @@ using namespace std;
 void truncate_line(char *str, string& subject, string& predict, string& object){
   // static(sibp_p941, foaf_based_near, 'United_States').                                                               
   // -----subject----- ----predict----- -----object------                                                               
-  // Truncate old version
-  /*
-  // clean subject
-  int idx = 0, start;
-  for(; str[idx] != '('; idx++)
-    str[idx] = ' ';
-  str[idx++] = ' ';
-  start = idx;
-  for(; str[idx] != ','; idx++);
-    if (str[idx] == ' ') str[idx] = '+';
-  str[idx] = ' ';
-  
-  subject = string(str, start, idx - start);
-  start = idx + 2;
-
-  // clean predict
-  for(; str[idx] != ','; idx++)
-    if (str[idx] == ' ') str[idx] = '+';
-  str[idx] = ' ';
-  predict = string(str, start, idx - start);
-  start = idx + 2;
-  
-  // clean object
-  for(; str[idx] != ')'; idx++)
-    if (str[idx] == ' ') str[idx] = '+';
-  object = string(str, start, idx - start);
-  */
   int idx = 0, start = 0;
 
   // clean subject

@@ -59,16 +59,6 @@ void ClientBarrier(struct thread_cfg *cfg){
 	local_barrier_val+=1;
 }
 
-// int stream_execute(client* clnt, request_or_reply& request){
-// 	request.silent=global_silent;
-// 	request_or_reply reply;
-	
-//     clnt->Send(request);
-//     reply = clnt->Recv();
-
-// 	return reply.stream_row_num();
-// }
-
 
 void single_execute(client* clnt,string filename,int execute_count){
 	int sum=0;

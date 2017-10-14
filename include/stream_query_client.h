@@ -21,12 +21,6 @@ class stream_query_client{
     int throughput_mode(request_or_reply& r);
     void local_metadata_lookup(request_or_reply& r);
 
-    /* inline int brother_tid(){ */
-    /*     return cfg->t_id >= global_stream_query_slave? */
-    /*            cfg->t_id - global_num_stream_client :   // I am slave */
-    /*            cfg->t_id + global_num_stream_client;    // I am master */
-    /* } */
-
  public:
     stream_query_client(thread_cfg* _cfg, stream_coordinator* _coordinator):
         cfg(_cfg),

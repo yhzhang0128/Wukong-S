@@ -38,16 +38,6 @@ vector<metadata_batch> *stream_metadata;
 
 using namespace std;
 
-/* old configuration on cube cluster
-int socket_0[] = {
-  0,2,4,6,8,10,12,14,16,18
-};
-
-int socket_1[] = {
-  1,3,5,7,9,11,13,15,17,19,0,2,4,6,8,10,12,14,16,18
-};
-*/
-
 static int socket_0[] =  {
     0,2,4,6,8,10,12,14,16,18,20,22
 };
@@ -161,15 +151,6 @@ void thread_allocation(){
         // reserve 2 cores for adaptor, ingestor, etc.
         int query_worker_cores = 24 - 2;
 
-        /*
-        if (global_stream_TCP_test){
-            // kv_fetch_rpc thread
-            global_num_thread += 1;
-            query_worker_cores -= 1;
-            // only support single thread for test purpose
-            assert(global_num_stream_client == 1);
-        }
-        */
         
         assert(global_num_server +
                global_num_client +

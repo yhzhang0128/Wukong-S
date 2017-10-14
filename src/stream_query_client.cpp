@@ -91,6 +91,7 @@ request_or_reply stream_query_client::recv(){
 }
 
 void stream_query_client::local_metadata_lookup(request_or_reply& r){
+    // @deprecated
     //local_optimized_metadata[i][r.stream_info.query_id]
     // local_optimized_metadata[cfg->m_id][r.stream_info.query_id].clear();
 

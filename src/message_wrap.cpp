@@ -109,43 +109,6 @@ bool TryRecvM(thread_cfg* cfg, int r_mid, metadata_cache_packet &packet){
     return true;
 }
 
-// forward star metadata packet
-// void SendMOpt(thread_cfg* cfg, int r_mid, int r_tid, forward_star_packet &packet){
-//     uint64_t t1=timer::get_usec();    
-//     std::stringstream ss;
-//     boost::archive::binary_oarchive oa(ss);
-//     oa << packet;
-//     uint64_t t2=timer::get_usec();
-//     //cout << "  Send archive latency" << t2 - t1 << endl;
-//     //cout << "Send " << packet.indexes.size() << " "
-//     //                << ss.str().length() << endl;
-
-//     if (global_use_rbf){
-//         cfg->rdma->rbfSend(cfg->t_id, r_mid, r_tid, ss.str().c_str(), ss.str().size());
-//     } else{
-//         cfg->node->Send(cfg->m_id, r_mid, r_tid, ss.str());
-//     }
-// }
-
-
-// void RecvMOpt(thread_cfg* cfg, int r_mid, forward_star_packet &packet){
-//     std::string str;
-//     if(global_use_rbf){
-//         str=cfg->rdma->rbfTargetRecv(cfg->t_id, r_mid);
-//     } else {
-//         str=cfg->node->Recv(r_mid);
-//     }
-
-//     uint64_t t1=timer::get_usec();
-//     std::stringstream s;
-//     s << str;
-//     boost::archive::binary_iarchive ia(s);
-//     ia >> packet;
-
-//     uint64_t t2=timer::get_usec();
-//     //cout << "  Recv archive latency" << t2 - t1 << endl;
-// }
-
 void SendR(thread_cfg* cfg,int r_mid,int r_tid,request_or_reply& r){
     std::stringstream ss;
     boost::archive::binary_oarchive oa(ss);    

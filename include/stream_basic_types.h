@@ -113,110 +113,6 @@ struct stream_vector_clock{
     }
 };
 
-/**************** data structures for metadata ****************/
-
-/**
- * @brief Metadata of a key in a stream window
- * @depricated The flattened data structures are more efficient.
- *
- * A stream window is a multiple of batches. Each batch may insert
- * a consecutive area into the value of a key, specified by paired
- * element in start_off and end_off.
- */
-/* struct memarea_archive{ */
-/*     uint64_t start_ptr, max_off; */
-/*     vector<uint32_t> start_off; */
-/*     vector<uint32_t> end_off; */
-
-/*     template <typename Archive> */
-/*     void serialize(Archive &ar, const unsigned int version) { */
-/*         ar & start_ptr; */
-/*         ar & max_off; */
-/*         ar & start_off; */
-/*         ar & end_off; */
-/*     } */
-
-/*     memarea_archive(): start_ptr(0), max_off(0) {} */
-/* }; */
-
-/**
- * @brief Metadata of a window
- * @depricated The flattened data structures are more efficient.
- *
- * All information needed to extract a window from the local kv-store
- */
-/* struct eager_metadata_packet{ */
-/*     map<uint64_t, memarea_archive> metadata; */
-
-/*     inline int size()  {return metadata.size();} */
-/*     template <typename Archive> */
-/*     void serialize(Archive &ar, const unsigned int version) { */
-/*         ar & metadata; */
-/*     } */
-/* }; */
-/* // local_eager_metadata[mid][qid] is the metadata currently needed by query qid on machine mid */
-/* extern eager_metadata_packet** local_eager_metadata; */
-
-
-/**
- * @brief Flattened memarea_archive for faster serialization
- */
-/* struct flat_memarea_archive{ */
-/*     uint32_t start_ptr, start_off, end_off; */
-    
-/*     template <typename Archive> */
-/*     void serialize(Archive &ar, const unsigned int version) { */
-/*         ar & start_ptr; */
-/*         ar & start_off; */
-/*         ar & end_off; */
-/*     } */
-/* }; */
-
-/**
- * @brief Flattened metadata of a window
- */
-/* struct forward_star_packet{ */
-/*     struct index{ */
-/*         uint64_t key; */
-/*         flat_memarea_archive area; */
-/*         template <typename Archive> */
-/*         void serialize(Archive &ar, const unsigned int version) { */
-/*             ar & key; */
-/*             ar & area; */
-/*         } */
-
-/*         // for sorting */
-/*         bool operator < (const index& oth) const{ */
-/*             return key < oth.key; */
-/*         } */
-/*     }; */
-/*     vector<index> indexes; */
-
-/*     template <typename Archive> */
-/*     void serialize(Archive &ar, const unsigned int version) { */
-/*         ar & indexes; */
-/*     } */
-
-/*     void add(uint64_t key, */
-/*              uint32_t start_ptr, uint32_t start_off, uint32_t end_off){ */
-/*         index idx; */
-/*         idx.key = key; */
-/*         idx.area.start_ptr = start_ptr; */
-/*         idx.area.start_off = start_off; */
-/*         idx.area.end_off = end_off; */
-/*         indexes.push_back(idx); */
-/*     } */
-
-/*     void clear(){ */
-/*         indexes.clear(); */
-/*     } */
-
-/*     void finish(){ */
-/*         sort(indexes.begin(), indexes.end()); */
-/*     } */
-/* }; */
-/* extern forward_star_packet** local_optimized_metadata; */
-
 /**
  * @brief Slot of metadata hash table bucket
  */
@@ -314,12 +210,6 @@ extern vector<metadata_batch> *stream_metadata;
 // extern unordered_map<uint64_t, memarea_slot>*** metadata_local_cache;
 
 /**************** data structures for query logic ****************/
-
-// definitions for garbage collection
-//gc[stream_id][query_id] = batch_id
-/* depricated gc style */
-/* typedef map<int, int> query_to_batchid; */
-/* typedef vector<query_to_batchid> stream_to_border; */
 
 
 /**

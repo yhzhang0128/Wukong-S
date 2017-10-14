@@ -113,33 +113,6 @@ struct local_key{
 	}
 };
 
-/*
-struct old_local_val{
-	uint64_t size:28;
-	uint64_t ptr:36;
-	old_local_val():size(0),ptr(0){
-		size-=1;
-		ptr-=1;
-	}
-	old_local_val(uint64_t s,uint64_t p):size(s),ptr(p){
-		if(size!=s || ptr !=p){
-			std::cout<<"truncated: "<<"("<<s<<","<<p<<")=>"
-									<<"("<<size<<","<<ptr<<")"<<std::endl;
-		}
-	}
-	bool operator==(const old_local_val& another_val){
-		if(size==another_val.size
-            &&  ptr==another_val.ptr){
-			return true;
-		}
-		return false;
-	}
-	bool operator!=(const old_local_val& another_val){
-		return !(operator==(another_val));
-	}
-};
-*/
-
 const int nbit_memarea_pointer = 36;
 const int nbit_memarea_offset = 28;
 /**
