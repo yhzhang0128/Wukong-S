@@ -1,4 +1,4 @@
-# LSBench Queries
+# LSBench Continuous Queries
 
 ## LSBench Query1
 ```sql
